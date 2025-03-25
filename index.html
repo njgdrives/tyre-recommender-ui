@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tyre Recommendation</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+        input, select, button { padding: 10px; margin: 10px; font-size: 16px; }
+        button { cursor: pointer; }
+    </style>
+    <script>
+        async function getRecommendation() {
+            const vehicle_type = document.getElementById("vehicle_type").value;
+            const driving_style = document.getElementById("driving_style").value;
+            const weather = document.getElementById("weather").value;
+            const budget = document.getElementById("budget").value;
+
+            const response = await fetch("https://tyre-recommender.onrender.com/recommend", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ vehicle_type, driving_style, weather, budget })
+            });
+
+            const result = await response.json();
+            document.getElementById("result").innerHTML = result.recommended_tyre || result.message;
+        }
+    </script>
+</head>
+<body>
+    <h1>Find the Best Tyre for Your Car</h1>
+    <label>Vehicle Type:</label>
+    <select id="vehicle_type">
+        <option value="sedan">Sedan</option>
+        <option value="SUV">SUV</option>
+        <option value="sports">Sports Car</option>
+    </select>
+
+    <label>Driving Style:</label>
+    <select id="driving_style">
+        <option value="city">City</option>
+        <option value="highway">Highway</option>
+        <option value="off-road">Off-Road</option>
+        <option value="performance">Performance</option>
+    </select>
+
+    <label>Weather Conditions:</label>
+    <select id="weather">
+        <option value="summer">Summer</option>
+        <option value="winter">Winter</option>
+        <option value="all-season">All-Season</option>
+    </select>
+
+    <label>Budget:</label>
+    <select id="budget">
+        <option value="economy">Economy</option>
+        <option value="mid-range">Mid-Range</option>
+        <option value="premium">Premium</option>
+    </select>
+
+    <br><br>
+    <button onclick="getRecommendation()">Find Tyre</button>
+    <p id="result"></p>
+</body>
+</html>
